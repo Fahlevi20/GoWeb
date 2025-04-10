@@ -1,5 +1,5 @@
 # Gunakan base image dari Go
-FROM golang:1.21
+FROM golang:1.22
 
 # Set working directory di container
 WORKDIR /app
@@ -8,7 +8,7 @@ WORKDIR /app
 COPY . .
 
 # Download dependencies
-RUN go mod download
+RUN go mod tidy
 
 # Build aplikasi
 RUN go build -o main .
