@@ -54,8 +54,8 @@ func InitDB() {
 
 // Query the database for the information requested and prints the results.
 // If the query fails exit the program with an error.
-func QueryData(ctx context.Context) ([]map[string]interface{}, error) {
-	rows, err := DB.QueryContext(ctx, "select * from log_tdw;")
+func QueryData(ctx context.Context, query string) ([]map[string]interface{}, error) {
+	rows, err := DB.QueryContext(ctx, query)
 	if err != nil {
 		log.Fatal("query error:", err)
 	}

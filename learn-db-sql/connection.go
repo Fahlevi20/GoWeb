@@ -23,16 +23,16 @@ func main() {
 		log.Fatal("Error loading .env file")
 	}
 
-	id := flag.Int64("id", 0, "person ID to find")
+	// id := flag.Int64("id", 0, "person ID to find")
 	dsn := flag.String("dsn", os.Getenv("DSN"), "connection data source name")
 	flag.Parse()
 
 	if len(*dsn) == 0 {
 		log.Fatal("missing dsn flag")
 	}
-	if *id == 0 {
-		log.Fatal("missing person ID")
-	}
+	// if *id == 0 {
+	// 	log.Fatal("missing person ID")
+	// }
 
 	// Opening a driver typically will not attempt to connect to the database.
 	pool, err = sql.Open("postgres", *dsn)
@@ -60,7 +60,7 @@ func main() {
 
 	Ping(ctx)
 
-	Query(ctx, *id)
+	Query(ctx)
 }
 
 // Ping the database to verify DSN provided by the user is valid and the
@@ -76,7 +76,7 @@ func Ping(ctx context.Context) {
 
 // Query the database for the information requested and prints the results.
 // If the query fails exit the program with an error.
-func Query(ctx context.Context, id int64) {
+func Query(ctx context.Context) {
 	ctx, cancel := context.WithTimeout(ctx, 5*time.Second)
 	defer cancel()
 

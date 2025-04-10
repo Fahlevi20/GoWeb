@@ -6,6 +6,7 @@ import (
 	"time"
 
 	"learn-sql-api/connection" // ga
+	"learn-sql-api/model"
 
 	"github.com/gin-gonic/gin"
 )
@@ -15,11 +16,17 @@ func main() {
 
 	router := gin.Default()
 
-	router.GET("/query", func(c *gin.Context) {
+	router.POST("/query", func(c *gin.Context) {
+		var req model.QueryRequest
+		if err := c.BindJSON(&req); err != nil || req.Query == "" {
+			c.JSON(http.StatusBadRequest, gin.H{"error": "Invalid request"})
+			return
+		}
+
 		ctx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
 		defer cancel()
 
-		data, err := connection.QueryData(ctx) // <-- ini yang benar
+		data, err := connection.QueryData(ctx, req.Query) // <-- ini yang benar
 		if err != nil {
 			c.JSON(http.StatusInternalServerError, gin.H{
 				"error": err.Error(),
